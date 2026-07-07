@@ -1,0 +1,26 @@
+
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: tripmate_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      # Optional: mount backend code for dev
+      # - ./backend:/app
+      - /app/__pycache__
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: tripmate_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

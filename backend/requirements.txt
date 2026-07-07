@@ -1,0 +1,15 @@
+langgraph
+langchain
+langchain-groq
+langchain-community
+langchain-tavily
+langchain-openai
+langchain-google-genai
+python-dotenv
+tavily-python
+requests
+airportsdata
+pycountry
+fastapi
+uvicorn
+jinja2
