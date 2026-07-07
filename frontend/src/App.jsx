@@ -4,13 +4,17 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-// Fix Leaflet default marker icon issue in React
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-})
+// Fix Leaflet default marker icon issue in React - moved to useEffect
+const fixLeafletIcons = () => {
+  if (L.Icon.Default.prototype._getIconUrl) {
+    delete L.Icon.Default.prototype._getIconUrl
+  }
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+  })
+}
 
 const AGENTS = [
   { id: 'profile_agent', num: '01', title: 'Profile Engine', desc: 'Extracting preferences & destination', icon: User },
@@ -54,6 +58,11 @@ function App() {
   const [planMeta, setPlanMeta] = useState(null) // destination, image, coords
   const [feedback, setFeedback] = useState('')
   const [showPlan, setShowPlan] = useState(false)
+
+  // Fix Leaflet icons on mount
+  useEffect(() => {
+    fixLeafletIcons()
+  }, [])
 
   const handleSSE = async (response) => {
     const reader = response.body.getReader()
@@ -132,7 +141,7 @@ function App() {
     setPlanMeta(null)
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const apiUrl = import.meta.env.VITE_API_URL || ''
       const response = await fetch(`${apiUrl}/api/travel`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -155,7 +164,7 @@ function App() {
     setHitlDraft(null)
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const apiUrl = import.meta.env.VITE_API_URL || ''
       const response = await fetch(`${apiUrl}/api/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -399,3 +408,4 @@ function App() {
 }
 
 export default App
+
