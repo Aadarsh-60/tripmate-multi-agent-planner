@@ -55,8 +55,8 @@ def get_llm(provider: str = "groq"):
             raise ValueError("GROQ_API_KEY is missing. Add it to .env")
         return ChatGroq(model="llama-3.3-70b-versatile", api_key=api_key, temperature=0.3)
 
-# Default LLM (used at import time for graph building)
-default_llm = get_llm("groq")
+# We will instantiate LLMs dynamically at runtime to avoid crash on startup if API keys are missing
+
 
 # =========================
 # Destination Image (Wikipedia API - FREE)
@@ -142,7 +142,7 @@ def _get_active_llm(state: TravelState):
     try:
         return get_llm(provider)
     except Exception:
-        return default_llm  # Fallback to Groq
+        return get_llm("groq")  # Fallback to Groq at runtime
 
 def profile_agent(state: TravelState):
     """Extracts user preferences, destination city, image, and coordinates."""
