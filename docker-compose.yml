@@ -14,6 +14,10 @@ services:
       # Optional: mount backend code for dev
       # - ./backend:/app
       - /app/__pycache__
+    networks:
+      default:
+        aliases:
+          - backend.railway.internal
 
   frontend:
     build:
