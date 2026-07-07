@@ -132,7 +132,8 @@ function App() {
     setPlanMeta(null)
 
     try {
-      const response = await fetch('/api/travel', {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/travel`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -154,7 +155,8 @@ function App() {
     setHitlDraft(null)
     
     try {
-      const response = await fetch('/api/approve', {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ thread_id: threadId, action: 'approve', feedback })
